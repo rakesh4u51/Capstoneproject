@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json, os, sys; import datetime; os.makedirs('audit_log', exist_ok=True); data = json.load(sys.stdin); open('audit_log/mcp_tool_calls.jsonl', 'a', encoding='utf-8').write(json.dumps({'tool': data.get('tool_name'), 'ts': str(datetime.datetime.utcnow())}) + '\\n')\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bandit -q -r bfsi -f txt -o audit_log/bandit_scan.txt || true"
+          }
+        ]
+      }
+    ]
+  }
+}
