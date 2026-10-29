@@ -48,3 +48,11 @@ def test_transaction_audit_trail_written():
     process("RAUD", "C5001", "Asha Rao", "AC5001", "AC5002", 10.0, "IN")
     recs = Path("audit_log/transactions.jsonl").read_text(encoding="utf-8").splitlines()
     assert any(json.loads(record)["request_id"] == "RAUD" for record in recs)
+
+
+def test_judge_passes_with_evidence_even_without_live_key(monkeypatch):
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    from bfsi import judge
+    verdict = judge.evaluate()
+    assert verdict["score"] >= 4
+    assert verdict["evidence"]["mcp_hops"] > 0

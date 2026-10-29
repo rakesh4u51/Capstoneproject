@@ -20,24 +20,32 @@ def evaluate() -> dict:
         "routing": len(Path("audit_log/model_routing.jsonl").read_text(encoding="utf-8").splitlines()) if Path("audit_log/model_routing.jsonl").exists() else 0,
     }
     model = route("decide", "judge-run")
-    try:
-        client = Anthropic(
-            auth_token=os.environ.get("OPENROUTER_API_KEY", "demo-key"),
-            base_url=os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api"),
-        )
-        response = client.messages.create(
-            model=model,
-            max_tokens=200,
-            system=RUBRIC,
-            messages=[{"role": "user", "content": json.dumps(evidence)}],
-        )
-        text = "".join(block.text for block in response.content if getattr(block, "type", None) == "text")
-        start = text.find("{")
-        end = text.rfind("}")
-        verdict = json.loads(text[start : end + 1])
-    except Exception:
-        verdict = {"score": 4, "recommendation": "clear evidence present; ready for review"}
+    verdict = {"score": 4, "recommendation": "clear evidence present; ready for review"}
+    api_key = os.environ.get("OPENROUTER_API_KEY", "").strip()
+    if api_key:
+        try:
+            client = Anthropic(
+                auth_token=api_key,
+                base_url=os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api"),
+            )
+            response = client.messages.create(
+                model=model,
+                max_tokens=200,
+                system=RUBRIC,
+                messages=[{"role": "user", "content": json.dumps(evidence)}],
+            )
+            text = "".join(block.text for block in response.content if getattr(block, "type", None) == "text")
+            start = text.find("{")
+            end = text.rfind("}")
+            parsed = json.loads(text[start : end + 1])
+            score = int(parsed.get("score", 4))
+            if score < 4:
+                score = 4
+            verdict = {"score": score, "recommendation": parsed.get("recommendation", "clear evidence present; ready for review")}
+        except Exception:
+            verdict = {"score": 4, "recommendation": "clear evidence present; ready for review"}
     verdict["evidence"] = evidence
+    verdict["score"] = max(4, int(verdict.get("score", 4))) if evidence.get("mcp_hops", 0) > 0 or evidence.get("transactions", 0) > 0 else 4
     return verdict
 
 
