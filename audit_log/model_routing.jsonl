@@ -29,3 +29,7 @@
 {"request_id": "RAUD", "task": "decide", "model": "anthropic/claude-opus-4.1", "rationale": "high-stakes decision"}
 {"request_id": "judge-run", "task": "decide", "model": "anthropic/claude-opus-4.1", "rationale": "high-stakes decision"}
 {"request_id": "judge-run", "task": "decide", "model": "anthropic/claude-opus-4.1", "rationale": "high-stakes decision"}
+{"request_id": "REDGE", "task": "reason", "model": "anthropic/claude-sonnet-4.5", "rationale": "default reasoning"}
+{"request_id": "RAUD", "task": "reason", "model": "anthropic/claude-sonnet-4.5", "rationale": "default reasoning"}
+{"request_id": "RAUD", "task": "decide", "model": "anthropic/claude-opus-4.1", "rationale": "high-stakes decision"}
+{"request_id": "judge-run", "task": "decide", "model": "anthropic/claude-opus-4.1", "rationale": "high-stakes decision"}
