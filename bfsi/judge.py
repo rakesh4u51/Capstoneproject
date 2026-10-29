@@ -53,13 +53,13 @@ if __name__ == "__main__":
     verdict = evaluate()
     path = Path("reports/judge_evaluation.md")
     path.parent.mkdir(exist_ok=True)
-    path.write_text(
-        "# Claude-as-Judge Evaluation\n\n"
-        f"**Score:** {verdict['score']}/5\n\n"
-        f"**Recommendation:** {verdict['recommendation']}\n\n"
-        f"**Evidence:** {json.dumps(verdict['evidence'])}\n\n"
-        f"**Production readiness:** {'READY' if verdict['score'] >= 4 else 'NOT READY'}\n",
-        encoding="utf-8",
-    )
+    sections = [
+        "# Claude-as-Judge Evaluation",
+        f"**Score:** {verdict['score']}/5",
+        f"**Recommendation:** {verdict['recommendation']}",
+        f"**Evidence:** {json.dumps(verdict['evidence'])}",
+        f"**Production readiness:** {'READY' if verdict['score'] >= 4 else 'NOT READY'}",
+    ]
+    path.write_text((chr(10) * 2).join(sections) + chr(10), encoding="utf-8")
     print(f"judge score = {verdict['score']} -> {'PASS' if verdict['score'] >= 4 else 'FAIL'}")
     raise SystemExit(0 if verdict["score"] >= 4 else 1)

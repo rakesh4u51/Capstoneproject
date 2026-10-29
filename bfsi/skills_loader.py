@@ -3,6 +3,7 @@
 from pathlib import Path
 
 SKILLS_DIR = Path("skills")
+NEWLINE = chr(10)
 
 
 def load_skills():
@@ -27,8 +28,8 @@ def build_cached_system(active=None):
     skills = load_skills()
     if active:
         skills = [skill for skill in skills if skill["meta"].get("name") in active]
-    library = "\n\n".join(f"## Skill: {skill['meta'].get('name')}\n{skill['body']}" for skill in skills)
-    return [{"type": "text", "text": "Heritage National Bank skill library.\n\n" + library, "cache_control": {"type": "ephemeral"}}]
+    library = (NEWLINE * 2).join(f"## Skill: {skill['meta'].get('name')}{NEWLINE}{skill['body']}" for skill in skills)
+    return [{"type": "text", "text": "Heritage National Bank skill library." + NEWLINE * 2 + library, "cache_control": {"type": "ephemeral"}}]
 
 
 def get_skill(name):

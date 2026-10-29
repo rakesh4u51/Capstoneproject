@@ -2,8 +2,8 @@
 
 **Score:** 4/5
 
-**Recommendation:** Implement automated compliance validation and increase test coverage for model routing decisions.
+**Recommendation:** Increase test coverage and document model-routing decisions for the 35 routing events.
 
-**Evidence:** {"mcp_hops": 86, "transactions": 12, "routing": 30}
+**Evidence:** {"mcp_hops": 100, "transactions": 14, "routing": 35}
 
 **Production readiness:** READY

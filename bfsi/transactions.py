@@ -24,5 +24,5 @@ def process(request_id: str, customer_id: str, name: str, from_account: str, to_
 
     _TXN_LOG.parent.mkdir(exist_ok=True)
     with _TXN_LOG.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(result) + "\n")
+        print(json.dumps(result), file=handle)
     return result

@@ -8,6 +8,7 @@ from anthropic import Anthropic
 from bfsi.mcp import registry
 from bfsi.skills_loader import build_cached_system
 
+NEWLINE = chr(10)
 _BANNED = re.compile(r"(ignore\s+previous|system\s+prompt|full\s+card\s+number)", re.IGNORECASE)
 
 
@@ -33,7 +34,7 @@ def reply(customer_id: str, message: str, ip_country: str = "IN", stream: bool =
         auth_token=os.environ.get("OPENROUTER_API_KEY", "demo-key"),
         base_url=os.environ.get("ANTHROPIC_BASE_URL", "https://openrouter.ai/api"),
     )
-    user_message = f"Customer {customer_id} asks: {cleaned}\nFraud signals: {signals}"
+    user_message = f"Customer {customer_id} asks: {cleaned}{NEWLINE}Fraud signals: {signals}"
     kwargs = {
         "model": os.environ.get("MODEL_SONNET", "anthropic/claude-sonnet-4.5"),
         "max_tokens": 300,

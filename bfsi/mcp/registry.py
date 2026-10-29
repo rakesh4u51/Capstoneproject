@@ -32,7 +32,7 @@ def _audit(server, tool, args, result):
     _SEQ["n"] += 1
     record = {"seq": _SEQ["n"], "server": server, "tool": tool, "args": _mask(args), "ok": "error" not in (result or {})}
     with _AUDIT_PATH.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(record) + "\n")
+        print(json.dumps(record), file=handle)
 
 
 def call(server: str, tool: str, **args):

@@ -19,5 +19,5 @@ def route(task: str, request_id: str) -> str:
     model = os.environ.get(env_key, default)
     _LOG_PATH.parent.mkdir(exist_ok=True)
     with _LOG_PATH.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps({"request_id": request_id, "task": task, "model": model, "rationale": rationale}) + "\n")
+        print(json.dumps({"request_id": request_id, "task": task, "model": model, "rationale": rationale}), file=handle)
     return model
