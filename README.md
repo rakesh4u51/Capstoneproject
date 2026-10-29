@@ -1,166 +1,100 @@
-# Heritage National Bank AI Banking Platform
+# Heritage National Bank — AI Banking Platform
 
-An integrated AI-powered banking platform built for the capstone project, combining MCP-backed banking tools, a compliance-guarded chatbot, fraud detection, sanctions screening, transaction processing, model routing, audit logging, and security automation.
+This repository contains a capstone-style BFSI (Banking, Financial Services, and Insurance) platform that demonstrates how an AI-powered banking system can integrate customer data, transaction processing, fraud detection, sanctions screening, and compliance automation in a secure workflow.
 
-## Overview
+The project is designed to model a modern digital banking environment where customer requests, risk checks, and financial actions are validated through an audit-friendly pipeline before approval.
 
-This project demonstrates a production-oriented BFSI architecture that combines:
+## Project Overview
 
-- Claude Skills-based reasoning layer
-- MCP integration for customer and banking operations
-- Guardrailed customer support chatbot
-- Fraud risk scoring and transaction monitoring
-- KYC, AML, and sanctions compliance workflow
-- Model routing across Haiku, Sonnet, and Opus
-- End-to-end transaction logging and audit tracing
-- Security scanning and governance checks
+Heritage National Bank is a sample AI banking platform that combines:
 
-## Project Structure
+- Transaction processing and validation
+- Fraud risk analysis
+- KYC, AML, and sanctions compliance checks
+- Model routing for lightweight and high-risk decisions
+- MCP-based banking and customer tools
+- Audit logging for operational transparency
+- AI chatbot support for customer and operations workflows
 
-```text
-.
-├── CLAUDE.md
-├── README.md
-├── .claude/
-│   ├── mcp.json
-│   ├── settings.json
-│   └── commands/
-├── .github/
-│   └── workflows/
-├── audit_log/
-│   ├── mcp_tool_calls.jsonl
-│   ├── model_routing.jsonl
-│   ├── transactions.jsonl
-│   └── bandit_scan.txt
-├── bfsi/
-│   ├── __init__.py
-│   ├── batch_fraud.py
-│   ├── chatbot.py
-│   ├── fraud_engine.py
-│   ├── judge.py
-│   ├── kyc_vision.py
-│   ├── main.py
-│   ├── model_router.py
-│   ├── skills_loader.py
-│   ├── transactions.py
-│   ├── compliance/
-│   │   ├── __init__.py
-│   │   ├── pipeline.py
-│   │   └── sanctions_check.py
-│   └── mcp/
-│       ├── __init__.py
-│       ├── banking_api_server.py
-│       ├── customer_info_server.py
-│       └── registry.py
-├── docs/
-│   ├── architecture.md
-│   └── deployment.md
-├── skills/
-│   ├── compliance-narrative/
-│   ├── customer-support/
-│   ├── fraud-triage/
-│   ├── kyc-extraction/
-│   ├── risk-scoring/
-│   └── sanctions-summary/
-├── tests/
-│   └── test_platform.py
-└── .env
-```
+## Key Capabilities
 
-## Main Features
+- Secure transaction handling for account-to-account transfers
+- Risk scoring for suspicious activity and fraud patterns
+- Compliance pipeline covering KYC, AML, sanctions, and final approval
+- Model routing between lightweight and reasoning models based on task complexity
+- Audit trail generation for important platform operations
+- End-to-end validation through automated tests
 
-### 1. MCP Banking Integration
-- Customer lookup and history retrieval
-- Balance checks and transfer flows
-- Banking API tools exposed via MCP for internal orchestration
-- Audit logging for every tool call
+## Repository Structure
 
-### 2. Skills Layer
-- Reusable skill pack for compliance, customer support, fraud, risk scoring, sanctions summaries, and KYC extraction
-- Cached prompt system used for consistent reasoning and lower overhead
+- `bfsi/` — Core banking platform logic, risk engine, compliance, MCP integrations, and transaction handling
+- `audit_log/` — Logs for compliance, model routing, and transaction activity
+- `docs/` — Project documentation and design references
+- `tests/` — Automated validation for the platform
+- `skills/` — Reusable agent skills and instructions
+- `reports/` — Generated reports and evaluation outputs
+- `images/` — Diagrams and supporting visuals
 
-### 3. Compliance Pipeline
-The platform enforces the required order:
+## Main Workflow
 
-KYC -> AML -> Sanctions -> Approval
+1. Customer and transaction data are validated.
+2. The compliance pipeline runs in sequence: KYC → AML → SANCTIONS → APPROVAL.
+3. Fraud and transaction risk are evaluated.
+4. Model routing decides which model is best suited for each stage.
+5. Every critical action is logged for audit and review.
 
-Transactions are blocked if the pipeline fails at any stage.
+## Example Execution
 
-### 4. Model Routing
-- Haiku for lightweight classification and batch scoring
-- Sonnet for chatbot and compliance reasoning
-- Opus for high-risk decisions and gate evaluation
-
-### 5. Security and Governance
-- Environment-variable-only secret handling
-- Input sanitization for prompts
-- Audit trail for transactions and MCP calls
-- Bandit security scan in the workflow
-- PCI-DSS-style controls enforced in design and execution
-
-## Setup
-
-### Prerequisites
-
-- Python 3.10+
-- Virtual environment recommended
-- OpenRouter-compatible API key
-- GitHub token for repository automation
-
-### Install dependencies
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install anthropic python-dotenv mcp bandit pytest
-```
-
-### Environment variables
-Create a `.env` file with:
-
-```env
-OPENROUTER_API_KEY="your_key_here"
-ANTHROPIC_BASE_URL="https://openrouter.ai/api"
-MODEL_HAIKU="anthropic/claude-3.5-haiku"
-MODEL_SONNET="anthropic/claude-sonnet-4.5"
-MODEL_OPUS="anthropic/claude-opus-4.1"
-GITHUB_TOKEN="your_github_token"
-```
-
-## Running the Project
-
-### Run the main workflow
+Run the main banking workflow:
 
 ```bash
 python -m bfsi.main
 ```
 
-### Run validation tests
+Or execute the project entry point directly:
 
 ```bash
-python -m pytest tests/ -q
+python bfsi/main.py
 ```
 
-### Run the judge gate
+## Testing
+
+Run the automated validation suite:
 
 ```bash
-python -m bfsi.judge
+pytest
 ```
 
-### Run security scan
+The project includes checks for:
 
-```bash
-bandit -q -r bfsi -ll
-```
+- MCP tool audit logging
+- Transaction approval and rejection logic
+- Sanctions detection
+- Input sanitization
+- End-to-end compliance evaluation
 
-## Validation Status
+## Security and Compliance Notes
 
-The project has been validated with fresh checks:
+This project follows banking-security principles, including:
 
-- Pytest: 8 passed
-- Bandit: no medium+ findings
-- Judge gate: score 4/5, PASS
+- Masking sensitive financial data in logs and outputs
+- Avoiding raw card or PAN exposure in records
+- Keeping secrets in environment variables
+- Auditing money movement and compliance decisions
+- Enforcing structured approval paths for high-risk events
 
-## Notes
+## Tech Stack
 
-This repository is structured as a production-ready capstone demonstration and is intended to show how AI, MCP, governance, compliance, and operational auditing can be combined inside a real financial-services platform.
+- Python
+- AI model orchestration
+- MCP tool integration
+- JSONL audit logging
+- Pytest-based validation
+
+## Purpose
+
+This repository serves as a demonstration of an AI-enabled fintech or BFSI platform, showing how modern AI systems can be integrated with compliance controls, transaction safety, and operational transparency in a banking context.
+
+## License
+
+This project is shared for educational and demonstration purposes.
